@@ -37,13 +37,35 @@ class Milk extends FoodItem {
 void main() {
   // Initialize milk from a file
   File file = File('milk.txt');
-  List<String> lines = file.readAsLinesSync();
-  String brand = lines[0];
-  String type = lines[1];
-  String color = lines[2];
 
-  Milk milk = Milk(type, color, brand);
-  milk.eat();
+  if (!file.existsSync()) {
+    // Create the file if it doesn't exist
+    file.createSync();
+
+    // Write sample data to the file
+    List<String> sampleData = [
+      'Brand: KCC',
+      'Type: Full Cream',
+      'Color: White'
+    ];
+    file.writeAsStringSync(
+        sampleData.join('\n')); // Write lines separated by newline
+
+    print('milk.txt file initialized with sample data.');
+  }
+
+  List<String> lines = file.readAsLinesSync();
+  if (lines.length >= 3) {
+    String brand = lines[0];
+    String type = lines[1];
+    String color = lines[2];
+
+    print('Brand: $brand');
+    print('Type: $type');
+    print('Color: $color');
+  } else {
+    print('Insufficient lines in the file. Expected at least 3 lines.');
+  }
 
   // Demonstrate using a loop
   for (var i = 0; i < 3; i++) {
